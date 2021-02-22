@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: docker/app/Dockerfile
+    working_dir: /var/www/symfony-cli
+    volumes:
+      - ./:/var/www/symfony-cli:rw
+    environment:
+      PHP_IDE_CONFIG: "serverName=xdebug-docker"
+      XDEBUG_CONFIG: "remote_host=172.20.226.32"
+    networks:
+      - symfony-cli
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "127.0.0.1:6379:6379"
+    networks:
+      - symfony-cli
+
+networks:
+  symfony-cli:
+    driver: bridge
